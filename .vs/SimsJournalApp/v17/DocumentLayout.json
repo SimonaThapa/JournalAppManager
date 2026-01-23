@@ -1,0 +1,92 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|c:\\users\\dell\\source\\repos\\simsjournalapp\\simsjournalapp\\models\\journalentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|solutionrelative:simsjournalapp\\models\\journalentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|c:\\users\\dell\\source\\repos\\simsjournalapp\\simsjournalapp\\models\\tag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|solutionrelative:simsjournalapp\\models\\tag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|c:\\users\\dell\\source\\repos\\simsjournalapp\\simsjournalapp\\models\\mood.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|solutionrelative:simsjournalapp\\models\\mood.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|c:\\users\\dell\\source\\repos\\simsjournalapp\\simsjournalapp\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{123CDF48-CCDD-466B-B8BA-8D85B62B1E1F}|SimsJournalApp\\SimsJournalApp.csproj|solutionrelative:simsjournalapp\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "JournalEntry.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Models\\JournalEntry.cs",
+              "RelativeDocumentMoniker": "SimsJournalApp\\Models\\JournalEntry.cs",
+              "ToolTip": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Models\\JournalEntry.cs",
+              "RelativeToolTip": "SimsJournalApp\\Models\\JournalEntry.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T15:45:15.088Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Tag.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Models\\Tag.cs",
+              "RelativeDocumentMoniker": "SimsJournalApp\\Models\\Tag.cs",
+              "ToolTip": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Models\\Tag.cs",
+              "RelativeToolTip": "SimsJournalApp\\Models\\Tag.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T15:42:52.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Mood.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Models\\Mood.cs",
+              "RelativeDocumentMoniker": "SimsJournalApp\\Models\\Mood.cs",
+              "ToolTip": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Models\\Mood.cs",
+              "RelativeToolTip": "SimsJournalApp\\Models\\Mood.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T15:39:04.391Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Components\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "SimsJournalApp\\Components\\Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\SimsJournalApp\\Components\\Pages\\Home.razor",
+              "RelativeToolTip": "SimsJournalApp\\Components\\Pages\\Home.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-23T15:31:15.978Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+wwwroot\css\app.css
+wwwroot\css\bootstrap\bootstrap.min.css
+wwwroot\css\bootstrap\bootstrap.min.css.map
+wwwroot\index.html
+C:\Users\DELL\source\repos\SimsJournalApp\SimsJournalApp\wwwroot\css\app.css
+C:\Users\DELL\source\repos\SimsJournalApp\SimsJournalApp\wwwroot\css\bootstrap\bootstrap.min.css
+C:\Users\DELL\source\repos\SimsJournalApp\SimsJournalApp\wwwroot\css\bootstrap\bootstrap.min.css.map
+C:\Users\DELL\source\repos\SimsJournalApp\SimsJournalApp\wwwroot\index.html
