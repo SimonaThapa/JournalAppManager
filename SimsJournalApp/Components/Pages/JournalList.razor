@@ -1,5 +1,81 @@
-﻿<h3>JournalList</h3>
+﻿@page "/journal-list"
+@inject Journa JournalService
+@using MudBlazor
+@using JournalApp.Models
+
+<MudPaper Class="pa-4 mx-auto" Style="max-width:800px">
+    <MudText Typo="Typo.h5" Class="mb-4">Journal Entries</MudText>
+
+    <!-- Search & Filter -->
+    <MudGrid Class="mb-2">
+        <MudItem xs="12" sm="4">
+            <MudTextField @bind-Value="searchText" Placeholder="Search content..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudSelect Label="Primary Mood" @bind-Value="filterMood">
+                <MudSelectItem Value="">All</MudSelectItem>
+                @foreach(var m in moods)
+                {
+                    <MudSelectItem Value="@m">@m</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudDateRangePicker @bind-DateRange="filterDateRange" Label="Filter by Date" />
+        </MudItem>
+    </MudGrid>
+
+    <MudButton Color="Color.Primary" OnClick="ApplyFilters">Apply Filters</MudButton>
+
+    <!-- Paginated Table -->
+    <MudTable Items="filteredEntries" ServerData="LoadEntries" RowsPerPage="10" Hover="true" Class="mt-4">
+        <HeaderContent>
+            <MudTh>Date</MudTh>
+            <MudTh>Content</MudTh>
+            <MudTh>Primary Mood</MudTh>
+            <MudTh>Tags</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.JournalDate.ToShortDateString()</MudTd>
+            <MudTd>@context.Content.Substring(0, Math.Min(50, context.Content.Length))...</MudTd>
+            <MudTd>@context.PrimaryMood</MudTd>
+            <MudTd>@string.Join(", ", context.Tags.Select(t => t.Name))</MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
 
 @code {
+    private List<JournalEntry> allEntries = new();
+    private List<JournalEntry> filteredEntries = new();
+    private string searchText = "";
+    private string filterMood = "";
+    private DateRange? filterDateRange;
+    private List<string> moods = new()
+    {
+        "Happy","Excited","Relaxed","Grateful","Confident",
+        "Calm","Thoughtful","Curious","Nostalgic","Bored",
+        "Sad","Angry","Stressed","Lonely","Anxious"
+    };
 
+    protected override async Task OnInitializedAsync()
+    {
+        allEntries = await JournalService.GetAllEntriesAsync();
+        filteredEntries = allEntries.OrderByDescending(e => e.JournalDate).ToList();
+    }
+
+    private async Task ApplyFilters()
+    {
+        filteredEntries = await JournalService.SearchAndFilterEntriesAsync(searchText, filterMood, filterDateRange);
+    }
+
+    private async Task<TableData<JournalEntry>> LoadEntries(TableState state)
+    {
+        var pageData = filteredEntries.Skip(state.Page * state.PageSize).Take(state.PageSize).ToList();
+        return new TableData<JournalEntry>()
+        {
+            Items = pageData,
+            TotalItems = filteredEntries.Count
+        };
+    }
 }
+
