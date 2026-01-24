@@ -1,5 +1,46 @@
-﻿<h3>ExportPage</h3>
+﻿@page "/export"
+@inject ExportService ExportService
+@inject JournalService JournalService
+@using MudBlazor
+@using JournalApp.Models
+
+<MudPaper Class="pa-4 mx-auto" Style="max-width:600px">
+    <MudText Typo="Typo.h5" Class="mb-4">Export Journals as PDF</MudText>
+
+    <MudDateRangePicker @bind-DateRange="dateRange" Label="Select Date Range" />
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ExportJournals" Class="mt-4">
+        Export PDF
+    </MudButton>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <MudText Typo="Typo.subtitle1" Color="Color.Success" Class="mt-2">@message</MudText>
+    }
+</MudPaper>
 
 @code {
+    private DateRange? dateRange;
+    private string message = "";
 
+    private async Task ExportJournals()
+    {
+        if (dateRange == null)
+        {
+            message = "Please select a date range!";
+            return;
+        }
+
+        var entries = await JournalService.GetEntriesByDateRange(dateRange.Value.Start, dateRange.Value.End);
+
+        if (!entries.Any())
+        {
+            message = "No entries found for this range.";
+            return;
+        }
+
+        string filePath = await ExportService.ExportJournalEntriesAsPdf(entries);
+        message = $"Exported {entries.Count} entries to {filePath}";
+    }
 }
+
