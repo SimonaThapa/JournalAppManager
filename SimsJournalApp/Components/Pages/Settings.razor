@@ -1,5 +1,18 @@
-﻿<h3>Settings</h3>
+﻿<MudPaper Class="pa-4 mx-auto" Style="max-width:500px">
+    <MudText Typo="Typo.h5">Settings</MudText>
+    <MudSwitch @bind-Checked="isDarkMode" Color="Color.Primary" Label="Dark Mode" OnChanged="ToggleTheme" />
+</MudPaper>
 
 @code {
+    private bool isDarkMode = false;
 
+    private void ToggleTheme(bool value)
+    {
+        isDarkMode = value;
+        // Apply theme to the app
+        if (isDarkMode)
+            ThemeProvider.Theme = new MudBlazor.MudTheme() { Palette = new Palette() { Black = "#121212", Background = "#1E1E1E" } };
+        else
+            ThemeProvider.Theme = new MudBlazor.MudTheme(); // Default light
+    }
 }
