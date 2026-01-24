@@ -1,0 +1,18 @@
+﻿<MudPaper Class="pa-4 mx-auto" Style="max-width:500px">
+    <MudText Typo="Typo.h6">Current Streak: @currentStreak days</MudText>
+    <MudText Typo="Typo.h6">Longest Streak: @longestStreak days</MudText>
+    <MudText Typo="Typo.h6">Missed Days: @string.Join(", ", missedDays.Select(d => d.ToShortDateString()))</MudText>
+</MudPaper>
+
+@code {
+    private int currentStreak = 0;
+    private int longestStreak = 0;
+    private List<DateTime> missedDays = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allEntries = await JournalService.GetAllEntriesAsync();
+        missedDays = JournalService.CalculateStreaks(allEntries, out currentStreak, out longestStreak);
+    }
+}
+
