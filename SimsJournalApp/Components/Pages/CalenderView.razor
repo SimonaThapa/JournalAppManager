@@ -1,0 +1,47 @@
+﻿@page "/calendar"
+@using JournalApp.Models
+@inject JournalService JournalService
+@using MudBlazor
+
+<MudPaper Class="pa-4 mx-auto" Style="max-width:700px">
+
+    <MudText Typo="Typo.h5" Class="mb-4">Journal Calendar</MudText>
+
+    <MudCalendar @bind-Date="selectedDate" MinDate="new DateTime(2023,1,1)" MaxDate="@DateTime.Today" OnDateChanged="OnDateSelected" />
+
+    <MudText Typo="Typo.subtitle1" Class="mt-4">
+        @if (selectedEntry != null)
+        {
+            <div>
+                <b>@selectedDate: </b> @selectedEntry.Content.Substring(0, Math.Min(100, selectedEntry.Content.Length))...
+            </div>
+        }
+        else
+        {
+            <div>No entry for this date</div>
+        }
+    </MudText>
+
+</MudPaper>
+
+@code {
+    private DateTime selectedDate = DateTime.Today;
+    private JournalEntry? selectedEntry;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEntry(selectedDate);
+    }
+
+    private async Task OnDateSelected(DateTime date)
+    {
+        selectedDate = date;
+        await LoadEntry(date);
+    }
+
+    private async Task LoadEntry(DateTime date)
+    {
+        selectedEntry = await JournalService.GetEntryByDateAsync(date);
+    }
+}
+
