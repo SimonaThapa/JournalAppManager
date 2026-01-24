@@ -1,74 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MudBlazor;
+using SimsJournalApp.Data;
 using SimsJournalApp.Models;
-using SQLite;
 
-namespace SimsJournalApp.Services
+namespace JournalApp.Services
 {
-    public class JournalEntryService
+    public class JournalService
     {
-        private readonly SQLiteAsyncConnection _db;
+        private readonly AppDbContext _context;
 
-        public JournalEntryService(SQLiteAsyncConnection db)
+        public JournalEntry(AppDbContext context)
         {
-            _db = db;
+            _context = context;
         }
 
-        // CREATE
-        public async Task CreateEntryAsync(JournalEntry entry)
+        // Existing CRUD methods
+        public async Task<List<JournalEntry>> GetAllEntriesAsync()
         {
-            int count = await _db.Table<JournalEntry>()
-                 .Where(e => e.EntryDate == entry.EntryDate.Date
-             && e.UserId == entry.UserId)
-              .CountAsync();
-
-            if (count > 0)
-                throw new InvalidOperationException(
-                    "Only one journal entry is allowed per day.");
-
-            entry.CreatedAt = DateTime.Now;
-            entry.UpdatedAt = DateTime.Now;
-            entry.WordCount = entry.Content
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
-
-            await _db.InsertAsync(entry);
+            return await _context.JournalEntries.OrderBy(e => e.EntryDate).ToListAsync();
         }
 
-        // UPDATE
-        public async Task UpdateEntryAsync(JournalEntry entry)
+        // <--- Place the streak calculation here
+        public List<DateTime> CalculateStreaks(List<JournalEntry> entries, out int currentStreak, out int longestStreak)
         {
-            entry.UpdatedAt = DateTime.Now;
-            entry.WordCount = entry.Content
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
+            var ordered = entries.OrderBy(e => e.EntryDate).ToList();
+            List<DateTime> missed = new();
+            currentStreak = 0;
+            longestStreak = 0;
+            DateTime? lastDate = null;
 
-            await _db.UpdateAsync(entry);
-        }
+            foreach (var e in ordered)
+            {
+                if (lastDate != null)
+                {
+                    int gap = (e.EntryDate - lastDate.Value).Days;
+                    if (gap > 1)
+                    {
+                        for (int i = 1; i < gap; i++)
+                            missed.Add(lastDate.Value.AddDays(i));
+                        currentStreak = 0;
+                    }
+                    else currentStreak++;
+                }
+                else currentStreak = 1;
 
-        
-        public async Task DeleteEntryAsync(int entryId)
-        {
-            await _db.DeleteAsync<JournalEntry>(entryId);
-        }
-
-        // By date
-        public async Task<JournalEntry?> GetEntryByDateAsync(
-            DateTime date, int userId)
-        {
-            return await _db.Table<JournalEntry>()
-                .FirstOrDefaultAsync(e =>
-                    e.EntryDate == date.Date && e.UserId == userId);
-        }
-
-        
-        public async Task<List<JournalEntry>> GetAllEntriesAsync(int userId)
-        {
-            return await _db.Table<JournalEntry>()
-                .Where(e => e.UserId == userId)
-                .OrderByDescending(e => e.EntryDate)
-                .ToListAsync();
+                longestStreak = Math.Max(longestStreak, currentStreak);
+                lastDate = e.EntryDate;
+            }
+            return missed;
         }
     }
 }
