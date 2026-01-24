@@ -2,24 +2,28 @@
 using SimsJournalApp.Data;
 using SimsJournalApp.Models;
 
+
 namespace JournalApp.Services
 {
     public class JournalService
     {
         private readonly AppDbContext _context;
 
-        public JournalEntry(AppDbContext context)
+        public JournalService(AppDbContext context)
         {
             _context = context;
         }
 
-        // Existing CRUD methods
+        // Get all journal entries
         public async Task<List<JournalEntry>> GetAllEntriesAsync()
         {
-            return await _context.JournalEntries.OrderBy(e => e.EntryDate).ToListAsync();
+            return await _context.JournalEntries
+                                 .Include(e => e.Tags) // include tags if you have them
+                                 .OrderBy(e => e.EntryDate)
+                                 .ToListAsync();
         }
 
-        // <--- Place the streak calculation here
+        // Calculate streaks
         public List<DateTime> CalculateStreaks(List<JournalEntry> entries, out int currentStreak, out int longestStreak)
         {
             var ordered = entries.OrderBy(e => e.EntryDate).ToList();
@@ -48,5 +52,23 @@ namespace JournalApp.Services
             }
             return missed;
         }
+
+        // Optional: search and filter (used in JournalList)
+        public async Task<List<JournalEntry>> SearchAndFilterEntriesAsync(string search, string mood, DateRange? dateRange)
+        {
+            var query = _context.JournalEntries.Include(e => e.Tags).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(e => e.Content.Contains(search));
+
+            if (!string.IsNullOrWhiteSpace(mood))
+                query = query.Where(e => e.PrimaryMood == mood);
+
+            if (dateRange != null)
+                query = query.Where(e => e.EntryDate >= dateRange.Value.Start && e.EntryDate <= dateRange.Value.End);
+
+            return await query.OrderByDescending(e => e.EntryDate).ToListAsync();
+        }
     }
 }
+
