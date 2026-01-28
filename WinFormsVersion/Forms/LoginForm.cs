@@ -1,138 +1,130 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace SimsAppJournal.Forms
 {
     public partial class LoginForm : Form
     {
-        private string enteredPin = "";
-        private readonly Services.AuthorizationService authService = new Services.AuthorizationService();
-
         public LoginForm()
         {
-            InitializeComponent();
-            InitializeLoginUI();
-        }
+            // Form Setup 
+            this.Text = "Sims Journal - Login";
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.BackColor = Color.White;
 
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
 
-        private void InitializeLoginUI()
-        {
-            this.Text = "SimsAppJournal - Login";
-            this.Size = new Size(800, 500);
-            this.StartPosition = FormStartPosition.CenterScreen;
-
-            var splitContainer = new SplitContainer
+            // Left Panel 
+            Panel left = new Panel
+            {
+                Dock = DockStyle.Left,
+                Width = screenWidth / 2
+            };
+            //picture box
+            PictureBox pic = new PictureBox
             {
                 Dock = DockStyle.Fill,
-                Orientation = Orientation.Vertical,
-                SplitterDistance = 480
+                SizeMode = PictureBoxSizeMode.StretchImage
             };
-            this.Controls.Add(splitContainer);
 
-            // Left panel
-            splitContainer.Panel1.BackgroundImage = Image.FromFile("images/login-bg.jpg");
-            splitContainer.Panel1.BackgroundImageLayout = ImageLayout.Stretch;
-            var lblQuote = new Label
+            string imagePath = Path.Combine(Application.StartupPath, "Assets", "C:\\Users\\DELL\\source\\repos\\SimsJournalApp\\WinFormsVersion\\Assets\\Untitled design.png");
+
+            if (File.Exists(imagePath))
+                pic.Image = Image.FromFile(imagePath);
+            else
+                pic.BackColor = Color.Gray;
+
+            left.Controls.Add(pic);
+
+            // Overlay text (slanted/italic)
+            Label quote = new Label
             {
-                Text = "\"Capture your thoughts, one entry at a time.\"",
+                Text = "“Reflect, record, and grow with every entry.”",
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 14, FontStyle.Italic),
-                AutoSize = true,
-                Location = new Point(20, 350)
+                Font = new Font("Segoe UI", 26, FontStyle.Bold | FontStyle.Italic),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.FromArgb(120, 0, 0, 0) 
             };
-            splitContainer.Panel1.Controls.Add(lblQuote);
+            quote.Parent = pic; // picture 
+            quote.BringToFront();
 
-            // Right panel
-            splitContainer.Panel2.BackColor = Color.FromArgb(30, 41, 59);
-            var lblPinDots = new Label
+            // Right Pane
+            Panel right = new Panel
             {
-                Text = "○ ○ ○ ○",
+                Dock = DockStyle.Fill,
+                BackColor = Color.White 
+            };
+
+            TableLayoutPanel layout = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 4,
+                Padding = new Padding(50)
+            };
+            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
+            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
+            right.Controls.Add(layout);
+
+            // PIN TextBox (white for contrast)
+            TextBox pin = new TextBox
+            {
+                PasswordChar = '●',
+                Width = 250,
+                Height = 40,
+                Font = new Font("Segoe UI", 14),
+                TextAlign = HorizontalAlignment.Center,
+                Anchor = AnchorStyles.None,
+                BackColor = Color.White,
+                ForeColor = Color.Black
+            };
+
+            // Login Button
+            Button login = new Button
+            {
+                Text = "Login",
+                Width = 250,
+                Height = 50,
+                BackColor = Color.FromArgb(99, 102, 241), // Indigo button
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 20, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(120, 50)
+                FlatStyle = FlatStyle.Flat,
+                Anchor = AnchorStyles.None
             };
-            splitContainer.Panel2.Controls.Add(lblPinDots);
+            login.FlatAppearance.BorderSize = 0;
 
-            int btnSize = 60, startX = 80, startY = 120, padding = 10;
-            int number = 1;
+            layout.Controls.Add(pin, 0, 1);
+            layout.Controls.Add(login, 0, 2);
 
-            for (int row = 0; row < 3; row++)
+            // Login Button Click 
+            login.Click += (s, e) =>
             {
-                for (int col = 0; col < 3; col++)
+                if (pin.Text == "1234") // simple PIN for testing
                 {
-                    var btn = new Button
-                    {
-                        Text = number.ToString(),
-                        Size = new Size(btnSize, btnSize),
-                        Location = new Point(startX + col * (btnSize + padding), startY + row * (btnSize + padding)),
-                        BackColor = Color.FromArgb(99, 102, 241),
-                        ForeColor = Color.White,
-                        FlatStyle = FlatStyle.Flat
-                    };
-                    int captured = number;
-                    btn.Click += (s, e) => EnterDigit(captured, lblPinDots);
-                    splitContainer.Panel2.Controls.Add(btn);
-                    number++;
+                    this.DialogResult = DialogResult.OK; 
+                    this.Close();
                 }
-            }
-
-            // Zero button
-            var zeroBtn = new Button
-            {
-                Text = "0",
-                Size = new Size(btnSize, btnSize),
-                Location = new Point(startX + btnSize + padding, startY + 3 * (btnSize + padding)),
-                BackColor = Color.FromArgb(99, 102, 241),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            zeroBtn.Click += (s, e) => EnterDigit(0, lblPinDots);
-            splitContainer.Panel2.Controls.Add(zeroBtn);
-        }
-
-        private void EnterDigit(int digit, Label lblDots)
-        {
-            if (enteredPin.Length < 4)
-            {
-                enteredPin += digit;
-                lblDots.Text = new string('●', enteredPin.Length).PadRight(4, '○');
-
-                if (enteredPin.Length == 4)
+                else
                 {
-                    if (authService.ValidatePin(enteredPin))
-                    {
-                        this.Hide();
-                        var dashboard = new DashboardForm();
-                        dashboard.Show();
-                    }
-                    else
-                    {
-                        ShakeForm();
-                        enteredPin = "";
-                        lblDots.Text = "○ ○ ○ ○";
-                    }
+                    MessageBox.Show("Invalid PIN", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-        }
+            };
 
-        private void ShakeForm()
-        {
-            var original = this.Location;
-            var rnd = new Random();
-            for (int i = 0; i < 10; i++)
-            {
-                this.Location = new Point(original.X + rnd.Next(-10, 10), original.Y);
-                System.Threading.Thread.Sleep(10);
-            }
-            this.Location = original;
+            // Add Panels 
+            this.Controls.Add(right); // fill remaining space
+            this.Controls.Add(left);  // left panel docked left
         }
     }
 }
+
+
+
+
+
+
+
